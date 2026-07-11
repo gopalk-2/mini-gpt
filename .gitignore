@@ -1,6 +1,31 @@
-venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
 .idea/
 .vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project
 checkpoints/
+*.pt
+wandb/
+
+# Data (large file — download instructions in README)
+data/input.txt
