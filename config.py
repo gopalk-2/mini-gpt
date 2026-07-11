@@ -1,15 +1,3 @@
-"""
-Configuration for Mini-GPT.
-
-Uses Python dataclasses to define model architecture and training
-hyperparameters. Defaults match Andrej Karpathy's char-level GPT
-trained on Tiny Shakespeare (~10.7M parameters).
-
-References:
-    - Karpathy's nanoGPT: https://github.com/karpathy/nanoGPT
-    - "Attention Is All You Need" (Vaswani et al., 2017)
-"""
-
 from dataclasses import dataclass
 
 

@@ -1,5 +1,5 @@
 """
-Byte Pair Encoding (BPE) — Learning Script.
+Byte Pair Encoding (BPE) 
 
 This file is a standalone exploration of the BPE algorithm,
 NOT used in the main Mini-GPT pipeline (which uses a character-level
@@ -11,28 +11,12 @@ work at scale.
 
 Kept here as a learning artifact to demonstrate understanding
 of subword tokenization.
-
-Reference:
-    Sennrich et al., "Neural Machine Translation of Rare Words
-    with Subword Units" (2016).
 """
 
 from collections import Counter
 
 
 def get_pair_counts(tokens: list[str]) -> Counter:
-    """Count adjacent token pairs in a sequence.
-
-    Args:
-        tokens: List of individual tokens (characters or subwords).
-
-    Returns:
-        Counter mapping (token_a, token_b) pairs to their frequency.
-
-    Example:
-        >>> get_pair_counts(list("banana"))
-        Counter({('a', 'n'): 2, ('n', 'a'): 2, ('b', 'a'): 1})
-    """
     pair_counts: Counter = Counter()
 
     for i in range(len(tokens) - 1):
@@ -43,19 +27,6 @@ def get_pair_counts(tokens: list[str]) -> Counter:
 
 
 def merge_pair(tokens: list[str], pair: tuple[str, str]) -> list[str]:
-    """Merge all occurrences of a token pair into a single token.
-
-    Args:
-        tokens: Current token sequence.
-        pair: The (token_a, token_b) pair to merge.
-
-    Returns:
-        New token list with the pair merged wherever it appeared.
-
-    Example:
-        >>> merge_pair(list("banana"), ('a', 'n'))
-        ['b', 'an', 'an', 'a']
-    """
     merged = []
     i = 0
 

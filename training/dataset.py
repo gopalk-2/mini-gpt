@@ -1,25 +1,3 @@
-"""
-Dataset utilities for Mini-GPT training.
-
-Follows Karpathy's simple and elegant approach:
-    1. Load the entire text file into memory
-    2. Tokenize it into a single long integer tensor
-    3. Split into train/val tensors (90/10 by default)
-    4. Sample random batches of (input, target) pairs
-
-No PyTorch Dataset/DataLoader overhead — for a single-file corpus
-like Tiny Shakespeare (~1MB), this approach is simpler and faster.
-
-Each training example is a chunk of `block_size` consecutive tokens.
-The target is the same chunk shifted right by one position:
-
-    Input:  "First Citizen"  → [F, i, r, s, t,  , C, i, t, i, z, e]
-    Target: "irst Citizen:"  → [i, r, s, t,  , C, i, t, i, z, e, n]
-
-This means every position simultaneously learns to predict the
-next token, giving us `block_size` training examples per sequence.
-"""
-
 import torch
 
 from tokenizer.tokenizer import CharTokenizer
@@ -30,17 +8,7 @@ def load_dataset(
     tokenizer: CharTokenizer,
     train_split: float = 0.9,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Load text data, tokenize, and split into train/val tensors.
 
-    Args:
-        data_path: Path to the text file (e.g., "data/input.txt").
-        tokenizer: A CharTokenizer with vocabulary already built,
-                   OR an uninitialized one (vocab will be built here).
-        train_split: Fraction of data for training (default 0.9 = 90%).
-
-    Returns:
-        Tuple of (train_data, val_data) as LongTensors.
-    """
     # Read raw text
     with open(data_path, "r", encoding="utf-8") as f:
         text = f.read()
@@ -75,25 +43,7 @@ def get_batch(
     batch_size: int,
     device: str,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Generate a random batch of (input, target) pairs.
 
-    Randomly samples `batch_size` starting positions from the data,
-    then extracts chunks of length `block_size`.
-
-    Args:
-        split: "train" or "val" to select which data to sample from.
-        train_data: Training data tensor.
-        val_data: Validation data tensor.
-        block_size: Context window length.
-        batch_size: Number of sequences per batch.
-        device: Device to place tensors on ("cpu", "cuda", "mps").
-
-    Returns:
-        Tuple of (x, y) where:
-            x: Input tokens of shape (batch_size, block_size).
-            y: Target tokens of shape (batch_size, block_size),
-               shifted right by 1 position.
-    """
     data = train_data if split == "train" else val_data
 
     # Random starting indices (ensuring we don't overflow)

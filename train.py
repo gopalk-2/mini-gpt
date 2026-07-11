@@ -14,7 +14,6 @@ Usage:
     python train.py
 
 The default config trains a ~10.7M parameter model for 5000 iterations.
-On a Mac M-series GPU (MPS): ~10-15 minutes
 On CPU: ~30-45 minutes
 On NVIDIA GPU: ~3-5 minutes
 

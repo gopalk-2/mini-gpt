@@ -1,10 +1,3 @@
-"""
-Utility functions for Mini-GPT.
-
-Helper functions used across training and inference scripts
-for reproducibility, device management, and model inspection.
-"""
-
 import os
 import random
 
@@ -13,11 +6,6 @@ import numpy as np
 
 
 def set_seed(seed: int) -> None:
-    """Set random seed for reproducibility across all libraries.
-
-    Args:
-        seed: Integer seed value.
-    """
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -25,17 +13,6 @@ def set_seed(seed: int) -> None:
 
 
 def get_device(preference: str = "auto") -> str:
-    """Detect the best available compute device.
-
-    Priority: CUDA GPU → Apple MPS → CPU.
-
-    Args:
-        preference: "auto" to auto-detect, or force a specific device
-                    ("cuda", "mps", "cpu").
-
-    Returns:
-        Device string suitable for torch.device().
-    """
     if preference != "auto":
         return preference
 
@@ -48,14 +25,6 @@ def get_device(preference: str = "auto") -> str:
 
 
 def count_parameters(model: torch.nn.Module) -> str:
-    """Count trainable parameters and return human-readable string.
-
-    Args:
-        model: PyTorch model.
-
-    Returns:
-        Formatted string like "10.65M parameters".
-    """
     total = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
     if total >= 1_000_000:
@@ -68,23 +37,6 @@ def count_parameters(model: torch.nn.Module) -> str:
 
 @torch.no_grad()
 def estimate_loss(model, train_data, val_data, eval_iters, block_size, batch_size, device):
-    """Estimate average loss over multiple batches for train and val.
-
-    Switches model to eval mode, averages loss over `eval_iters`
-    random batches, then switches back to train mode.
-
-    Args:
-        model: The GPT model.
-        train_data: Training data tensor.
-        val_data: Validation data tensor.
-        eval_iters: Number of batches to average over.
-        block_size: Context window length.
-        batch_size: Batch size for evaluation.
-        device: Compute device string.
-
-    Returns:
-        Dict with "train" and "val" average losses.
-    """
     from training.dataset import get_batch
 
     model.eval()
@@ -105,15 +57,6 @@ def estimate_loss(model, train_data, val_data, eval_iters, block_size, batch_siz
 
 
 def save_checkpoint(model, optimizer, iteration, loss, path):
-    """Save a training checkpoint.
-
-    Args:
-        model: The GPT model.
-        optimizer: The optimizer.
-        iteration: Current training iteration.
-        loss: Current loss value.
-        path: File path to save the checkpoint.
-    """
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
     torch.save(
@@ -130,15 +73,5 @@ def save_checkpoint(model, optimizer, iteration, loss, path):
 
 
 def load_checkpoint(path, device="cpu"):
-    """Load a training checkpoint.
-
-    Args:
-        path: Path to the checkpoint file.
-        device: Device to load tensors to.
-
-    Returns:
-        Dict containing model_state_dict, optimizer_state_dict,
-        iteration, loss, and config.
-    """
     checkpoint = torch.load(path, map_location=device, weights_only=False)
     return checkpoint

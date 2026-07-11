@@ -1,10 +1,3 @@
-"""
-Tests for the GPT model architecture.
-
-Verifies tensor shapes, causal masking behavior, Pre-LN ordering,
-weight tying, and end-to-end forward/generate pass.
-"""
-
 import pytest
 import torch
 
@@ -17,10 +10,6 @@ from model.embedding import Embedding
 from model.positional_embedding import PositionalEmbedding
 from model.layer_norm import LayerNorm
 
-
-# ===================================================================
-# Test fixtures
-# ===================================================================
 
 @pytest.fixture
 def config():
@@ -41,9 +30,6 @@ def model(config):
     return GPT(config)
 
 
-# ===================================================================
-# Embedding Tests
-# ===================================================================
 
 class TestEmbedding:
     """Tests for the token embedding layer."""
@@ -75,9 +61,6 @@ class TestPositionalEmbedding:
         assert output.shape == (16, 64)
 
 
-# ===================================================================
-# LayerNorm Tests
-# ===================================================================
 
 class TestLayerNorm:
     """Tests for the custom LayerNorm implementation."""
@@ -105,9 +88,6 @@ class TestLayerNorm:
         assert torch.allclose(var, torch.ones_like(var), atol=1e-4)
 
 
-# ===================================================================
-# FeedForward Tests
-# ===================================================================
 
 class TestFeedForward:
     """Tests for the position-wise feed-forward network."""
@@ -126,9 +106,6 @@ class TestFeedForward:
         assert ffn.net[0].out_features == 256
 
 
-# ===================================================================
-# MultiHeadAttention Tests
-# ===================================================================
 
 class TestMultiHeadAttention:
     """Tests for multi-head causal self-attention."""
@@ -164,10 +141,6 @@ class TestMultiHeadAttention:
         assert mha.qkv.out_features == 64 * 3
 
 
-# ===================================================================
-# TransformerBlock Tests
-# ===================================================================
-
 class TestTransformerBlock:
     """Tests for the Transformer decoder block."""
 
@@ -178,12 +151,6 @@ class TestTransformerBlock:
         assert output.shape == (2, 8, 64)
 
     def test_pre_ln_architecture(self):
-        """Verify Pre-LN: norm is applied BEFORE attention, not after.
-
-        In Pre-LN, the residual path is: x = x + sublayer(norm(x))
-        This means if we zero out the sublayer weights, the output
-        should be approximately equal to the input (identity residual).
-        """
         block = TransformerBlock(
             embedding_dim=64,
             num_heads=4,
@@ -204,9 +171,6 @@ class TestTransformerBlock:
         assert torch.allclose(output, x, atol=1e-5)
 
 
-# ===================================================================
-# Full GPT Model Tests
-# ===================================================================
 
 class TestGPT:
     """Tests for the complete GPT model."""

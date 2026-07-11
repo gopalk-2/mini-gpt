@@ -1,10 +1,3 @@
-"""
-Tests for the character-level tokenizer.
-
-Verifies vocabulary construction, encoding/decoding roundtrips,
-and edge cases.
-"""
-
 import pytest
 
 from tokenizer.tokenizer import CharTokenizer

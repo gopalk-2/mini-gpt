@@ -1,6 +1,4 @@
 """
-Inference script for Mini-GPT.
-
 Loads a trained checkpoint and generates text from a given prompt.
 Supports both single-shot and interactive generation modes.
 
@@ -29,15 +27,6 @@ from utils.helpers import get_device, load_checkpoint
 
 
 def load_model(checkpoint_path: str, device: str) -> tuple[GPT, CharTokenizer]:
-    """Load a trained model and tokenizer from checkpoint.
-
-    Args:
-        checkpoint_path: Path to the .pt checkpoint file.
-        device: Device to load the model on.
-
-    Returns:
-        Tuple of (model, tokenizer).
-    """
     print(f"Loading checkpoint: {checkpoint_path}")
 
     checkpoint = load_checkpoint(checkpoint_path, device=device)
@@ -76,21 +65,7 @@ def generate_text(
     device: str,
     stream: bool = True,
 ) -> str:
-    """Generate text from a prompt.
 
-    Args:
-        model: Trained GPT model in eval mode.
-        tokenizer: Character tokenizer.
-        prompt: Starting text (or empty for unconditional generation).
-        max_tokens: Number of tokens to generate.
-        temperature: Sampling temperature (lower = more deterministic).
-        top_k: Top-k filtering (None = no filtering).
-        device: Compute device.
-        stream: If True, print tokens as they're generated.
-
-    Returns:
-        The complete generated text (prompt + generated).
-    """
     # Encode prompt
     if prompt:
         token_ids = tokenizer.encode(prompt)
@@ -142,10 +117,6 @@ def generate_text(
 
 
 def interactive_mode(model, tokenizer, args, device):
-    """Interactive REPL for text generation.
-
-    Type a prompt and press Enter to generate. Type 'quit' to exit.
-    """
     print("\n" + "=" * 60)
     print("  Mini-GPT Interactive Mode")
     print("=" * 60)

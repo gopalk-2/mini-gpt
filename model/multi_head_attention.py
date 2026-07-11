@@ -1,6 +1,4 @@
 """
-Multi-Head Self-Attention — the core mechanism of the Transformer.
-
 Instead of computing a single attention function, multi-head attention
 runs `num_heads` parallel attention computations, each operating on
 a `head_dim`-sized slice of the embedding. The outputs are concatenated
@@ -20,8 +18,6 @@ Implementation details:
 The math:
     Attention(Q, K, V) = softmax(Q @ K^T / sqrt(d_k)) @ V
 
-Reference:
-    Section 3.2 of "Attention Is All You Need" (Vaswani et al., 2017).
 """
 
 import math
@@ -31,15 +27,6 @@ import torch.nn as nn
 
 
 class MultiHeadAttention(nn.Module):
-    """Multi-head causal self-attention.
-
-    Args:
-        embedding_dim: Total embedding dimensionality.
-        num_heads: Number of parallel attention heads.
-        dropout: Dropout probability on attention weights and output.
-        block_size: Maximum sequence length (for causal mask buffer).
-    """
-
     def __init__(
         self,
         embedding_dim: int,
@@ -80,20 +67,6 @@ class MultiHeadAttention(nn.Module):
         )
 
     def forward(self, x):
-        """Apply multi-head causal self-attention.
-
-        Args:
-            x: Input tensor of shape (batch_size, seq_len, embedding_dim).
-
-        Returns:
-            Output tensor of shape (batch_size, seq_len, embedding_dim).
-
-        The computation flow:
-            1. Project input to Q, K, V via fused linear layer
-            2. Reshape to (batch, heads, seq_len, head_dim)
-            3. Compute scaled dot-product attention with causal mask
-            4. Concatenate heads and apply output projection
-        """
         batch_size, seq_len, _ = x.shape
 
         # ---- Step 1: Fused QKV Projection ----
