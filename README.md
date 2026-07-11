@@ -1,6 +1,6 @@
 # Mini-GPT: Transformer Language Model from Scratch
 
-A decoder-only Transformer language model built **entirely from scratch** in PyTorch — no `nn.TransformerDecoder`, no Hugging Face, no shortcuts. Every component is implemented from first principles to demonstrate deep understanding of the architecture behind GPT-2.
+A decoder-only Transformer language model built **entirely from scratch** in PyTorch — no `nn.TransformerDecoder`, no Hugging Face. Every component is implemented from first principles to demonstrate deep understanding of the architecture behind GPT-2.
 
 Trained on the [Tiny Shakespeare](https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt) dataset to generate Shakespeare-like text.
 
@@ -197,6 +197,11 @@ mini-gpt/
 5. **Forward pass** through the Transformer, compute cross-entropy loss
 6. **Backpropagate** and update weights with AdamW
 7. **Repeat** for 5000 iterations with cosine learning rate decay
+
+### Results after Training Data
+
+![alt text](<data/training result 1.png>)
+![alt text](<data/training result 2.png>)
 
 ### Generation
 
